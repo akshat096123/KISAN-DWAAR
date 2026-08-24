@@ -42,11 +42,9 @@ data/*.sqlite3
 .Trashes
 ehthumbs.db
 Thumbs.db
-.idea/
-.vscode/*
-!.vscode/extensions.json
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Local offline design references, screenshots & prompt documents
+_design_references/
+*.pdf
+ui example *.png
+dev.log
+
