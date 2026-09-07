@@ -19,16 +19,11 @@ import escrowsRouter from './routes/escrows';
 import pricingRouter from './routes/pricing';
 import auditRouter from './routes/audit';
 import ivrRouter from './routes/ivr';
-// Serve frontend build
-app.use(express.static(path.join(__dirname, '../dist')));
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-// Serve frontend for all non-API routes
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
-});
 
 // Middleware
 app.use(cors({ origin: true, credentials: true }));
@@ -63,6 +58,10 @@ app.use('/api/escrows', escrowsRouter);
 app.use('/api/pricing', pricingRouter);
 app.use('/api/audit-logs', auditRouter);
 app.use('/api/ivr', ivrRouter);
+
+
+// Serve frontend build
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // Healthcheck
 app.get('/api/health', (req: Request, res: Response) => {
@@ -291,6 +290,12 @@ app.get('/api/state', (req: Request, res: Response): void => {
     console.error('Error fetching global state:', error);
     res.status(500).json({ error: error.message || 'Failed to aggregate state.' });
   }
+});
+
+
+// Serve frontend for all non-API routes
+app.use((req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 // Error handling middleware
