@@ -2,9 +2,11 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { initDatabase, db } from './db';
 import { seedDatabaseIfEmpty } from './seed';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import authRouter from './routes/auth';
 import farmersRouter from './routes/farmers';
@@ -17,11 +19,16 @@ import escrowsRouter from './routes/escrows';
 import pricingRouter from './routes/pricing';
 import auditRouter from './routes/audit';
 import ivrRouter from './routes/ivr';
-
+// Serve frontend build
+app.use(express.static(path.join(__dirname, '../dist')));
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+// Serve frontend for all non-API routes
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
 
 // Middleware
 app.use(cors({ origin: true, credentials: true }));
